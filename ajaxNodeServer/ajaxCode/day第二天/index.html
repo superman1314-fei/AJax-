@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+  <script>
+ function ajax(obj){
+  obj=obj||[];
+  obj.url=obj.url||'';
+  obj.type=obj.type||'get';
+  obj.data=obj.data||{};
+
+
+
+  let arr=[];
+  for(let key in obj.data){
+    arr.push(`${key}=${obj.data[key]}`)
+  }
+
+  obj.data=arr.join('&')
+
+
+  let xhr=new XMLHttpRequest();
+  // 判断是否是get
+  if(obj.type.toLowerCase()==='get'){
+    obj.url+='?'+obj.data
+  };
+  
+  xhr.open(obj.type,obj.url);
+  // 判断是否是post
+  if(obj.type.toLowerCase()==='post'){
+    xhr.getResponseHeader('Content-Type','application/x-www-form-urlencoded')
+    xhr.send(data);
+  }else{
+    xhr.send();
+  }
+  
+
+    xhr.onreadystatechange=function(){
+      if(xhr.readyState===4 && xhr.status===200){
+        let response=xhr.responseText;
+        if(xhr.getResponseHeader('Content-Type').indexOf('json')!==-1){
+        response=JSON.parse(xhr.responseText);
+      }
+      // console.log(xhr.responseText);  
+     
+      obj.callback && obj.callback(response)
+      }
+     
+    }
+  
+ }
+
+
+ ajax({
+   url:'http://127.0.0.1:8080/isUserNameExist',
+   type:'get',
+   data:{userName:'1323222'},
+   callback:function(res){
+    if(res.code==200){
+      console.log(res.msg);
+      
+    }
+   }
+ })
+  </script>
+
+
+</html>

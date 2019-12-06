@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+</head>
+
+<body>
+    <!-- <form action="">
+        用户名：<input type="text" name='username' value='jack'> <br>
+        密码：<input type="password" name='userpwd' value="123"> <br>
+        <input type="button" id="sub" value='登陆'>
+    </form> -->
+
+    <div class="container">
+        <form>
+            <div class="form-group" style="height: 120px;">
+
+            </div>
+            <fieldset class="form-group row">
+                <legend class="col-form-legend col-sm-1-12">请登录</legend>
+                <div class="offset-sm-2 col-sm-10">
+                    <div class="form-group">
+                        <label for="">用户名</label>
+                        <input type="text" class="form-control" name="userName" id="userName" aria-describedby="helpId"
+                            placeholder="">
+                        <small id="helpId" class="form-text text-muted">请输入您的用户名</small>
+                    </div>
+                </div>
+                <div class="offset-sm-2 col-sm-10">
+                    <div class="form-group">
+                        <label for="">密码</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            aria-describedby="helpId" placeholder="">
+                        <small id="helpId" class="form-text text-muted">请输入您的密码</small>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group row">
+                <div class="offset-sm-2 col-sm-10">
+                    <input type="button" id="login-btn" class="btn btn-primary" value="登录">
+                    <a href="../views/register3copy.html" class="btn  btn-primary">注册</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- Button trigger modal -->
+
+      
+      <!-- Modal -->
+      <div class="modal fade" id="example" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">提示</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+            
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+              <button type="button" class="btn btn-primary " id='btn-sure'>确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+<script src="../static/js/jquery.js"></script>
+<script src="../static/js/bootstrap.js"></script>
+<script src="../ajaxCode/day第二天/ajax.js"></script>
+
+<script>
+ 
+    $('#userName').on('blur',function(){
+        let name=$('#userName').val();
+        if(name.trim().length===0){
+            $('.modal-body').text('请输入正确的用户名')
+            $('#example').modal()
+        }
+    })
+    $('#password').on('blur',function(){
+        let pass=$('#password').val()
+        if(pass.trim().length<6){
+            $('.modal-body').text('输入6位数以上的密码')
+            $('#example').modal()
+        }
+    });
+    // 点击登录
+    $('#login-btn').on('click',function(){
+        let name=$('#userName').val();
+        let pass=$('#password').val();
+        ajax({
+            url:'http://127.0.0.1:8080/doLogin',
+            type:'post',
+            data:{
+                userName:name,
+                password:pass
+            },
+            callback:function(res){
+                if(res.code===200){
+                    localStorage.setItem('userId',res.userId)
+                    location.href='../ajaxCode/day第三天.html/index.html'
+                }else{
+                    $('.modal-body').text(res.msg)
+                    $('#example').modal()
+                }
+            }
+        })
+    })
+    
+$('#btn-sure').on('click',function(){
+    $('#example').modal('hide')
+})
+</script>
+</html> 
